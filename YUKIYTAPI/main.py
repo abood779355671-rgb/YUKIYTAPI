@@ -25,7 +25,7 @@ async def home(request: Request):
     uptime = round(time.time() - START_TIME, 2)
     return JSONResponse({
         "status": "Running...",
-        "owner": "Sudeep (YUKIMUSIC)",
+        "owner": "YUKIMUSIC",
         "uptime": f"{uptime}s",
         "message": "Welcome to YUKI API"
     })
@@ -79,7 +79,8 @@ async def stream_music(request: Request, video_id: str, type: str = "audio", tok
             'format': 'bestaudio/best' if type == "audio" else 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
             'outtmpl': file_path,
             'quiet': True,
-            'js_runtimes': ['node'],
+            # 🔥 YT-DLP SYNTAX FIX: Changed list to dictionary format below
+            'js_runtimes': {'node': {}},
             'cookiefile': COOKIES_FILE # <-- Cookies file yahan load ho rahi hai
         }
         if type == "audio":
@@ -94,4 +95,4 @@ async def stream_music(request: Request, video_id: str, type: str = "audio", tok
     
     add_download()
     return FileResponse(file_path, media_type="audio/mpeg" if type == "audio" else "video/mp4")
-  
+    
