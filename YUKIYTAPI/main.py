@@ -23,20 +23,40 @@ app = FastAPI(title="YUKI YT API")
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-CACHE_DIR = os.path.join(BASE_DIR, "saved")
-COOKIES_FILE = os.path.join(BASE_DIR, "cookies.txt")
+# Auto-detect project root
+# Works in:
+# /app/main.py
+# /app/YUKIYTAPI/main.py
+# Docker / Coolify / local setups
 
+if os.path.basename(BASE_DIR).lower() == "yukiytapi":
+    PROJECT_ROOT = os.path.abspath(os.path.join(BASE_DIR, ".."))
+else:
+    PROJECT_ROOT = BASE_DIR
+
+# Cache directory
+CACHE_DIR = os.path.join(PROJECT_ROOT, "saved")
+
+# Cookies file
+COOKIES_FILE = os.path.join(PROJECT_ROOT, "cookies.txt")
+
+# Create cache dir if missing
 os.makedirs(CACHE_DIR, exist_ok=True)
 
+# Runtime storage
 TOKENS = {}
 START_TIME = time.time()
 
+# Detect Node.js
 NODE_AVAILABLE = shutil.which("node") is not None
 
-
-# ─────────────────────────────────────────
-# VIDEO ID EXTRACTOR
-# ─────────────────────────────────────────
+# Debug logs
+print(f"[YUKI] BASE_DIR      => {BASE_DIR}")
+print(f"[YUKI] PROJECT_ROOT  => {PROJECT_ROOT}")
+print(f"[YUKI] CACHE_DIR     => {CACHE_DIR}")
+print(f"[YUKI] COOKIES_FILE  => {COOKIES_FILE}")
+print(f"[YUKI] Cookies Found => {os.path.exists(COOKIES_FILE)}")
+print(f"[YUKI] Node.js       => {NODE_AVAILABLE}")
 
 def extract_video_id(url_or_id: str) -> str:
     url_or_id = url_or_id.strip()
