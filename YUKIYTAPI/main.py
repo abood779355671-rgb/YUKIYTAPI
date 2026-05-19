@@ -116,7 +116,7 @@ def build_ytdlp_cmd(video_id: str, outtmpl: str, media_type: str) -> list:
         ]
     else:
         base += [
-            "-f", "bestaudio/best",
+            "-f", "best[ext=mp4]/best",
         ]
 
     base.append(video_id)
